@@ -18,7 +18,7 @@ pip install openpyxl
 
 ```bash
 # انتقل إلى مجلد المستودع / Navigate to repository folder
-cd /path/to/Excel-files-
+cd /path/to/repository
 
 # تشغيل البرنامج النصي / Run the script
 python3 add_arabic_guidance.py

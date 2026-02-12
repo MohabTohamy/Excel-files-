@@ -89,7 +89,7 @@ def get_guidance_for_column(column_name):
         r'height|ارتفاع': "أدخل الارتفاع بالمتر",
         r'area|مساحة': "أدخل المساحة بالمتر المربع",
         r'substreetarea': "أدخل مساحة الشارع الفرعي بالمتر المربع",
-        r'distressarea|distess_area': "أدخل مساحة العيب بالمتر المربع",
+        r'distressarea|distress_area|distess_area': "أدخل مساحة العيب بالمتر المربع",
         r'lane_area': "أدخل مساحة المسار بالمتر المربع",
         r'span.*length': "أدخل طول البحر/الفتحة بالمتر",
         
@@ -130,7 +130,7 @@ def get_guidance_for_column(column_name):
         r'priority|أولوية': "أدخل درجة الأولوية (عالية، متوسطة، منخفضة)",
         
         # Technical measurements (FWD, GPR, IRI, SKID)
-        r'd0|d1|d2|d3|d4|d5|d6|d7|d8|d9': "أدخل قراءة جهاز FWD بالميكرون (مثال: 310.5)",
+        r'd\d+': "أدخل قراءة جهاز FWD بالميكرون (مثال: 310.5)",
         r'layer\d+': "أدخل سمك الطبقة بالسنتيمتر",
         r'col\d+': "أدخل البيانات المطلوبة",
         r'iri': "أدخل قيمة IRI (مؤشر الخشونة الدولي) بوحدة m/km",
