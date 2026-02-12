@@ -58,21 +58,57 @@ Each Excel file contains:
 
 ### إضافة صف إرشادي لقوالب جديدة / Adding Guidance Rows to New Templates
 
-إذا كنت بحاجة لإضافة صف إرشادي لقوالب جديدة، استخدم البرنامج النصي المرفق:
+يتوفر برنامجان نصيان لإضافة صفوف الإرشادات:
 
-If you need to add guidance rows to new templates, use the included script:
+Two scripts are available for adding guidance rows:
+
+#### 1. البرنامج النصي الذكي (موصى به) / Intelligent Script (Recommended)
+
+**`add_arabic_guidance.py`** - برنامج نصي محسّن يستخدم الكشف الذكي عن أنواع الأعمدة
+
+**`add_arabic_guidance.py`** - Enhanced script with intelligent column type detection
 
 ```bash
 # تثبيت المكتبات المطلوبة / Install required libraries
 pip install openpyxl
 
 # تشغيل البرنامج النصي / Run the script
+python3 add_arabic_guidance.py
+```
+
+**المميزات / Features:**
+- ✅ كشف تلقائي للأعمدة التي تحتوي بالفعل على إرشادات عربية / Auto-detects files with existing Arabic guidance
+- ✅ مطابقة ذكية للأنماط لأنواع الأعمدة المختلفة / Intelligent pattern matching for different column types
+- ✅ دعم شامل للعديد من أنواع الأعمدة (الجسور، السلامة المرورية، الإنارة، السرعة، إلخ) / Comprehensive support for many column types
+- ✅ تنسيق صحيح (خط 9، مائل، رمادي) / Proper formatting (size 9, italic, gray)
+- ✅ تقرير تفصيلي بالملفات المعالجة / Detailed report of processed files
+- ✅ معالجة جميع ملفات .xlsx في المجلد / Processes all .xlsx files in the directory
+
+**أنواع الأعمدة المدعومة / Supported Column Types:**
+- المعرفات والرموز / IDs and Codes (Code, ID, SectionCode, BridgeID, etc.)
+- التواريخ والأوقات / Dates and Times (Date, Time, SurveyDate, etc.)
+- المواقع والإحداثيات / Locations and GPS (Location, GPS, Coordinates, Lat, Long)
+- الشوارع والطرق / Streets and Roads (Street, Lane, Direction)
+- القياسات والأبعاد / Measurements and Dimensions (Length, Width, Height, Area)
+- الحالة والخطورة / Status and Severity (Status, Condition, Severity)
+- الجسور / Bridges (Bridge Type, Span Length, Load Capacity)
+- السلامة المرورية / Traffic Safety (Accident Type, Casualties, Weather)
+- الإنارة / Lighting (Light Type, Power, Pole Material)
+- السرعة والمركبات / Speed and Vehicles (Speed, Vehicle Type)
+- التحسينات / Improvements (Improvement Type, Cost, Priority)
+- القياسات الفنية / Technical Measurements (FWD, GPR, IRI, SKID)
+
+#### 2. البرنامج النصي الأصلي / Original Script
+
+**`add_guidance_rows.py`** - للملفات السبعة الأصلية فقط / For the original seven files only
+
+```bash
 python3 add_guidance_rows.py
 ```
 
-**ملاحظة**: يمكنك تعديل ملف `add_guidance_rows.py` لإضافة إرشادات مخصصة لقوالب جديدة.
+**ملاحظة**: البرنامج النصي الجديد `add_arabic_guidance.py` يوفر كشف تلقائي أفضل ودعم أوسع لأنواع الأعمدة المختلفة.
 
-**Note**: You can modify `add_guidance_rows.py` to add custom guidance for new templates.
+**Note**: The new `add_arabic_guidance.py` script provides better auto-detection and broader support for different column types.
 
 ## المتطلبات التقنية / Technical Requirements
 
