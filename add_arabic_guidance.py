@@ -53,88 +53,96 @@ def get_guidance_for_column(column_name):
     column_lower = str(column_name).lower()
     
     # Comprehensive guidance mappings based on column patterns
+    # NOTE: Patterns are checked in order, so more specific patterns should come first
     guidance_patterns = {
-        # IDs and Codes
-        r'(code|id|رمز|معرف)': "أدخل رمز/معرف فريد (مثال: 001، ABC-123)",
+        # Technical measurements (FWD, GPR, IRI, SKID) - very specific
+        r'd\d+': "أدخل قراءة جهاز FWD بالميكرون (مثال: 310.5)",
+        r'layer\d+': "أدخل سمك الطبقة بالسنتيمتر",
+        r'col\d+': "أدخل البيانات المطلوبة",
+        r'iri': "أدخل قيمة IRI (مؤشر الخشونة الدولي) بوحدة m/km",
+        r'mu|friction': "أدخل قيمة معامل الاحتكاك/مقاومة الانزلاق",
+        
+        # Bridge-specific (before generic patterns)
+        r'bridgeid|bridge_id|bridge\s+id': "أدخل رمز تعريف الجسر",
+        r'bridge.*type|نوع.*جسر': "أدخل نوع الجسر (خرساني، معدني، إلخ)",
+        r'bridge': "أدخل معلومات الجسر",
+        r'span.*length': "أدخل طول البحر/الفتحة بالمتر",
+        r'load.*capacity|حمولة': "أدخل الحمولة القصوى بالطن",
+        
+        # Traffic Safety (before generic patterns)
+        r'accident.*type': "أدخل نوع الحادث (اصطدام، انقلاب، دهس، إلخ)",
+        r'casualties|إصابات': "أدخل عدد الإصابات أو الوفيات",
+        r'weather|طقس': "أدخل حالة الطقس (صحو، ممطر، ضبابي، إلخ)",
+        r'vehicle.*type|نوع.*مركبة': "أدخل نوع المركبة (سيارة خاصة، شاحنة، حافلة، دراجة)",
+        
+        # Lighting (before generic patterns)
+        r'light.*type|نوع.*إنارة': "أدخل نوع الإنارة (LED، صوديوم، هاليد معدني، إلخ)",
+        r'pole.*material': "أدخل مادة العمود (حديد، ألمنيوم، خرسانة)",
+        r'workingstatus|working_status': "أدخل حالة التشغيل (يعمل، معطل، يحتاج صيانة)",
+        
+        # Improvements (before generic patterns)
+        r'improvement.*type': "أدخل نوع التحسين المطلوب",
+        r'cost|تكلفة': "أدخل التكلفة التقديرية بالريال",
+        r'priority|أولوية': "أدخل درجة الأولوية (عالية، متوسطة، منخفضة)",
+        r'completiondate|completion_date': "أدخل تاريخ الإنجاز المتوقع",
+        
+        # Specific IDs and Codes (before generic code/id pattern)
         r'sectioncode|section_code': "أدخل رمز القطاع/المقطع",
         r'intersectioncode': "أدخل رمز التقاطع",
         r'samplecode|sample_code': "أدخل رمز العينة",
         r'regioncode': "أدخل رمز المنطقة",
         r'distresscode|distress_code': "أدخل رمز العيب",
         r'distressno|distress_no': "أدخل رقم نوع العيب",
-        r'bridgeid|bridge_id': "أدخل رمز تعريف الجسر",
         
-        # Dates and Times
-        r'(date|تاريخ)': "أدخل التاريخ بصيغة DD/MM/YYYY",
+        # Specific area measurements (before generic area pattern)
+        r'substreetarea': "أدخل مساحة الشارع الفرعي بالمتر المربع",
+        r'distressarea|distress_area|distess_area': "أدخل مساحة العيب بالمتر المربع",
+        r'lane_area': "أدخل مساحة المسار بالمتر المربع",
+        
+        # Specific dates (before generic date pattern)
         r'surveydate': "أدخل تاريخ المسح بصيغة DD/MM/YYYY",
-        r'completiondate|completion_date': "أدخل تاريخ الإنجاز المتوقع",
-        r'time|وقت': "أدخل الوقت بصيغة HH:MM",
         
-        # Location and GPS
-        r'(location|موقع)': "أدخل الموقع أو الإحداثيات",
-        r'(gps|coordinates|إحداثيات)': "أدخل خط الطول والعرض (Lat, Long)",
-        r'(lat|latitude)': "أدخل خط العرض (Latitude)",
-        r'(long|longitude)': "أدخل خط الطول (Longitude)",
+        # Specific status (before generic status pattern)
+        r'severity': "أدخل درجة الخطورة (Low=منخفض، Medium=متوسط، High=عالي)",
+        r'condition': "أدخل حالة الجسر (ممتاز، جيد، متوسط، سيء)",
         
         # Streets and Roads
-        r'street|شارع': "أدخل اسم أو رقم الشارع",
         r'substreetnumber': "أدخل رقم الشارع الفرعي",
         r'substreetname': "أدخل اسم الشارع الفرعي",
+        r'street|شارع': "أدخل اسم أو رقم الشارع",
         r'lane|مسار': "أدخل رقم المسار (L1, L2, إلخ)",
         r'direction|اتجاه': "أدخل اتجاه الحركة (شمال، جنوب، شرق، غرب)",
         
-        # Measurements - Dimensions
+        # Location and GPS
+        r'(gps|coordinates|إحداثيات)': "أدخل خط الطول والعرض (Lat, Long)",
+        r'(lat|latitude)': "أدخل خط العرض (Latitude)",
+        r'(long|longitude)': "أدخل خط الطول (Longitude)",
+        r'(location|موقع)': "أدخل الموقع أو الإحداثيات",
+        
+        # Measurements - Dimensions (generic)
         r'length|طول': "أدخل الطول بالمتر أو السنتيمتر",
         r'width|عرض': "أدخل العرض بالمتر أو السنتيمتر",
         r'height|ارتفاع': "أدخل الارتفاع بالمتر",
         r'area|مساحة': "أدخل المساحة بالمتر المربع",
-        r'substreetarea': "أدخل مساحة الشارع الفرعي بالمتر المربع",
-        r'distressarea|distress_area|distess_area': "أدخل مساحة العيب بالمتر المربع",
-        r'lane_area': "أدخل مساحة المسار بالمتر المربع",
-        r'span.*length': "أدخل طول البحر/الفتحة بالمتر",
         
-        # Quantities and Counts
+        # Quantities
         r'quantity|كمية': "أدخل الكمية بالوحدة المناسبة",
-        r'casualties|إصابات': "أدخل عدد الإصابات أو الوفيات",
+        r'power|قدرة': "أدخل القدرة بالواط (W)",
+        r'speed|سرعة': "أدخل السرعة بالكيلومتر/ساعة (km/h)",
         
-        # Status and Conditions
-        r'(status|حالة)': "أدخل الحالة (جيد، متوسط، سيء، إلخ)",
-        r'severity': "أدخل درجة الخطورة (Low=منخفض، Medium=متوسط، High=عالي)",
-        r'condition': "أدخل حالة الجسر (ممتاز، جيد، متوسط، سيء)",
-        r'workingstatus|working_status': "أدخل حالة التشغيل (يعمل، معطل، يحتاج صيانة)",
+        # Dates and Times (generic)
+        r'(date|تاريخ)': "أدخل التاريخ بصيغة DD/MM/YYYY",
+        r'time|وقت': "أدخل الوقت بصيغة HH:MM",
         
         # Descriptions and Notes
         r'(description|وصف)': "أدخل وصف تفصيلي",
         r'(notes|ملاحظات)': "أدخل أي ملاحظات إضافية",
         
-        # Bridge-specific
-        r'bridge.*type|نوع.*جسر': "أدخل نوع الجسر (خرساني، معدني، إلخ)",
-        r'load.*capacity|حمولة': "أدخل الحمولة القصوى بالطن",
+        # Status (generic - should be last among status patterns)
+        r'(status|حالة)': "أدخل الحالة (جيد، متوسط، سيء، إلخ)",
         
-        # Traffic Safety
-        r'accident.*type': "أدخل نوع الحادث (اصطدام، انقلاب، دهس، إلخ)",
-        r'weather|طقس': "أدخل حالة الطقس (صحو، ممطر، ضبابي، إلخ)",
-        
-        # Lighting
-        r'light.*type|نوع.*إنارة': "أدخل نوع الإنارة (LED، صوديوم، هاليد معدني، إلخ)",
-        r'power|قدرة': "أدخل القدرة بالواط (W)",
-        r'pole.*material': "أدخل مادة العمود (حديد، ألمنيوم، خرسانة)",
-        
-        # Speed
-        r'speed|سرعة': "أدخل السرعة بالكيلومتر/ساعة (km/h)",
-        r'vehicle.*type|نوع.*مركبة': "أدخل نوع المركبة (سيارة خاصة، شاحنة، حافلة، دراجة)",
-        
-        # Improvements
-        r'improvement.*type': "أدخل نوع التحسين المطلوب",
-        r'cost|تكلفة': "أدخل التكلفة التقديرية بالريال",
-        r'priority|أولوية': "أدخل درجة الأولوية (عالية، متوسطة، منخفضة)",
-        
-        # Technical measurements (FWD, GPR, IRI, SKID)
-        r'd\d+': "أدخل قراءة جهاز FWD بالميكرون (مثال: 310.5)",
-        r'layer\d+': "أدخل سمك الطبقة بالسنتيمتر",
-        r'col\d+': "أدخل البيانات المطلوبة",
-        r'iri': "أدخل قيمة IRI (مؤشر الخشونة الدولي) بوحدة m/km",
-        r'mu|friction': "أدخل قيمة معامل الاحتكاك/مقاومة الانزلاق",
+        # Generic IDs and Codes (should be last to catch anything not caught above)
+        r'(code|id|رمز|معرف)': "أدخل رمز/معرف فريد (مثال: 001، ABC-123)",
     }
     
     # Try to match patterns
